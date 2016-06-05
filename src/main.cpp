@@ -1,6 +1,6 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include "Chip8.h"
+#include "Chip8/Chip8.h"
 
 int main()
 {

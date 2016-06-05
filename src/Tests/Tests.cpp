@@ -5,12 +5,12 @@
 #define CATCH_CONFIG_MAIN
 
 #include "catch.hpp"
-#include "Chip8.h"
+#include "../Chip8/Chip8.h"
 
 TEST_CASE( "Chip8 interpreter tests", "[chip8]")
 {
     Chip8 chip8 {};
-    
+
     SECTION("JP")
     {
         chip8.ram[0x200] = 0x1B;
