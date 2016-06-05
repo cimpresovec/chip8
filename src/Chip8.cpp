@@ -71,7 +71,7 @@ void Chip8::tick()
             break;
         //SE Vx, byte - 3xbb - Skip next instruction if Vx = byte
         case 0x3000:
-            if (V[opcode & 0x0F00 >> 8] == opcode & 0x00FF)
+            if (V[(opcode & 0x0F00) >> 8] == (opcode & 0x00FF))
             {
                 PC += 2;
             }
@@ -79,7 +79,7 @@ void Chip8::tick()
             break;
         //SNE Vx, byte - 4xbb - Not equal skip
         case 0x4000:
-            if (V[opcode & 0x0F00 >> 8] != opcode & 0x00FF)
+            if (V[(opcode & 0x0F00) >> 8] != (opcode & 0x00FF))
             {
                 PC += 2;
             }
@@ -87,7 +87,7 @@ void Chip8::tick()
             break;
         //SE Vx, Vy - 5xy0 - Equal skip
         case 0x5000:
-            if (V[opcode & 0x0F00 >> 8] == V[opcode & 0x00F0 >> 4])
+            if (V[(opcode & 0x0F00) >> 8] == V[(opcode & 0x00F0) >> 4])
             {
                 PC += 2;
             }
@@ -95,12 +95,12 @@ void Chip8::tick()
             break;
         //LD Vx, byte - put byte in Vx
         case 0x6000:
-            V[opcode & 0x0F00 >> 8] = opcode & 0x00FF;
+            V[(opcode & 0x0F00) >> 8] = opcode & 0x00FF;
             PC += 2;
             break;
         //ADD Vx, byte - Set Vx = Vx + kk.
         case 0x7000:
-            V[opcode & 0x0F00 >> 8] += opcode & 0x00FF;
+            V[(opcode & 0x0F00) >> 8] += opcode & 0x00FF;
             break;
         default:
             //TODO ERROR
