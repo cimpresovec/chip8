@@ -1,6 +1,6 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include "Chip8/Chip8.h"
+#include "chip8/chip8.h"
 
 int main()
 {
@@ -8,7 +8,7 @@ int main()
     sf::RenderWindow window(sf::VideoMode(800, 600), "CHIP8");
     window.setFramerateLimit(60);
 
-    //Chip8
+    //chip8
     Chip8 chip8 {};
     chip8.loadROM("../roms/PONG");
 

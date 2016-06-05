@@ -5,9 +5,9 @@
 #define CATCH_CONFIG_MAIN
 
 #include "catch.hpp"
-#include "../Chip8/Chip8.h"
+#include "../chip8/chip8.h"
 
-TEST_CASE( "Chip8 interpreter tests", "[chip8]")
+TEST_CASE( "chip8 interpreter tests", "[chip8]")
 {
     Chip8 chip8 {};
 

@@ -8,7 +8,7 @@
 #include <array>
 #include <string>
 
-//Chip8 box
+//chip8 box
 struct Chip8
 {
     //Memory
