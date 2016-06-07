@@ -151,10 +151,20 @@ void Chip8::tick()
                     V[0xF] = V[(opcode & 0x0F00) >> 8] > V[(opcode & 0x00F0) >> 4];
                     V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] - V[(opcode & 0x00F0) >> 4];
                     break;
-                //SHR Vx, VF = Vx & 0x1, Vx = Vx / 2
+                //SHR Vx, VF = Vx & 0x1, Vx = Vx >> 1
                 case 0x6:
                     V[0xF] = V[(opcode & 0x0F00) >> 8] & 0x1;
                     V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] >> 1;
+                    break;
+                //SUBN Vx, Vy, set VF to NOT burrow
+                case 0x7:
+                    V[0xF] = V[(opcode & 0x00F0) >> 4] > V[(opcode & 0x0F00) >> 8];
+                    V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x00F0) >> 4] - V[(opcode & 0x0F00) >> 8];
+                    break;
+                //SHL Vx, VF = Vx & 0x1, Vx = Vx << 1
+                case 0xE:
+                    V[0xF] = (V[(opcode & 0x0F00) >> 8] & 0x80) >> 7;
+                    V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] << 1;
                     break;
                 default:
                     break;
