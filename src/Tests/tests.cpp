@@ -103,6 +103,7 @@ TEST_CASE( "chip8 interpreter tests", "[chip8]")
         chip8.tick();
 
         REQUIRE(chip8.V[0x0] == 0x59);
+        REQUIRE(chip8.PC == 0x202);
     }
     SECTION("ADD Vx, byte")
     {
@@ -114,6 +115,7 @@ TEST_CASE( "chip8 interpreter tests", "[chip8]")
         chip8.tick();
 
         REQUIRE(chip8.V[0x2] == 0x05 + 1);
+        REQUIRE(chip8.PC == 0x202);
     }
     SECTION("LD Vx, Vy")
     {
@@ -125,6 +127,7 @@ TEST_CASE( "chip8 interpreter tests", "[chip8]")
         chip8.tick();
 
         REQUIRE(chip8.V[0x8] == 0xAB);
+        REQUIRE(chip8.PC == 0x202);
     }
     SECTION("OR Vx, Vy")
     {
@@ -137,6 +140,7 @@ TEST_CASE( "chip8 interpreter tests", "[chip8]")
         chip8.tick();
 
         REQUIRE(chip8.V[0x9] == (0xAB | 0x57));
+        REQUIRE(chip8.PC == 0x202);
     }
     SECTION("AND Vx, Vy")
     {
@@ -149,6 +153,7 @@ TEST_CASE( "chip8 interpreter tests", "[chip8]")
         chip8.tick();
 
         REQUIRE(chip8.V[0x9] == (0xAB & 0x57));
+        REQUIRE(chip8.PC == 0x202);
     }
     SECTION("XOR Vx, Vy")
     {
@@ -161,6 +166,7 @@ TEST_CASE( "chip8 interpreter tests", "[chip8]")
         chip8.tick();
 
         REQUIRE(chip8.V[0x9] == (0xAB ^ 0x57));
+        REQUIRE(chip8.PC == 0x202);
     }
     SECTION("ADD Vx, Vy")
     {
@@ -187,6 +193,8 @@ TEST_CASE( "chip8 interpreter tests", "[chip8]")
             REQUIRE(chip8.V[0xA] == ((0xAA + 0xDD) & 0xFF));
             REQUIRE(chip8.V[0xF] == 1);
         }
+
+        REQUIRE(chip8.PC == 0x202);
     }
     SECTION("SUB Vx, Vy")
     {
@@ -213,6 +221,8 @@ TEST_CASE( "chip8 interpreter tests", "[chip8]")
             REQUIRE(chip8.V[0xA] == (0xAA - 0x11));
             REQUIRE(chip8.V[0xF] == 1);
         }
+
+        REQUIRE(chip8.PC == 0x202);
     }
     SECTION("SHR Vx")
     {
@@ -237,6 +247,8 @@ TEST_CASE( "chip8 interpreter tests", "[chip8]")
             REQUIRE(chip8.V[0xF] == 0);
             REQUIRE(chip8.V[0xC] == 0x52 / 2);
         }
+
+        REQUIRE(chip8.PC == 0x202);
     }
     SECTION("SUBN Vx, Vy")
     {
@@ -263,6 +275,8 @@ TEST_CASE( "chip8 interpreter tests", "[chip8]")
             REQUIRE(chip8.V[0xA] == (0xAA - 0x11));
             REQUIRE(chip8.V[0xF] == 1);
         }
+
+        REQUIRE(chip8.PC == 0x202);
     }
     SECTION("SHL Vx")
     {
@@ -287,5 +301,7 @@ TEST_CASE( "chip8 interpreter tests", "[chip8]")
             REQUIRE(chip8.V[0xF] == 0);
             REQUIRE(chip8.V[0xC] == 0x72 << 1);
         }
+
+        REQUIRE(chip8.PC == 0x202);
     }
 }

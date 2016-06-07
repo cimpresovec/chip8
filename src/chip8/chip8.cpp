@@ -100,6 +100,7 @@ void Chip8::tick()
         //ADD Vx, byte - Set Vx = Vx + kk.
         case 0x7000:
             V[(opcode & 0x0F00) >> 8] += opcode & 0x00FF;
+            PC += 2;
             break;
         //Multiple op codes
         case 0x8000:
@@ -108,18 +109,22 @@ void Chip8::tick()
                 //LD Vx Vy, store Vy in Vx
                 case 0x0:
                     V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x00F0) >> 4];
+                    PC += 2;
                     break;
                 //OR Vx Vy, store in Vx
                 case 0x1:
                     V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] | V[(opcode & 0x00F0) >> 4];
+                    PC += 2;
                     break;
                 //AND Vx, Vy, store in Vx
                 case 0x2:
                     V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] & V[(opcode & 0x00F0) >> 4];
+                    PC += 2;
                     break;
                 //XOR Vx, Vy, store in Vx
                 case 0x3:
                     V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] ^ V[(opcode & 0x00F0) >> 4];
+                    PC += 2;
                     break;
                 //ADD Vx, Vy, store in Vx, set carry in VF
                 case 0x4:
@@ -135,6 +140,7 @@ void Chip8::tick()
                      */
                     V[0xF] = V[(opcode & 0x0F00) >> 8] > 0xFF - V[(opcode & 0x00F0) >> 4];
                     V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] + V[(opcode & 0x00F0) >> 4];
+                    PC += 2;
                     break;
                 //SUB Vx, Vy, store in Vx, set VF to NOT burrow
                 case 0x5:
@@ -150,21 +156,25 @@ void Chip8::tick()
                      */
                     V[0xF] = V[(opcode & 0x0F00) >> 8] > V[(opcode & 0x00F0) >> 4];
                     V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] - V[(opcode & 0x00F0) >> 4];
+                    PC += 2;
                     break;
                 //SHR Vx, VF = Vx & 0x1, Vx = Vx >> 1
                 case 0x6:
                     V[0xF] = V[(opcode & 0x0F00) >> 8] & 0x1;
                     V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] >> 1;
+                    PC += 2;
                     break;
                 //SUBN Vx, Vy, set VF to NOT burrow
                 case 0x7:
                     V[0xF] = V[(opcode & 0x00F0) >> 4] > V[(opcode & 0x0F00) >> 8];
                     V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x00F0) >> 4] - V[(opcode & 0x0F00) >> 8];
+                    PC += 2;
                     break;
                 //SHL Vx, VF = Vx & 0x1, Vx = Vx << 1
                 case 0xE:
                     V[0xF] = (V[(opcode & 0x0F00) >> 8] & 0x80) >> 7;
                     V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] << 1;
+                    PC += 2;
                     break;
                 default:
                     break;
