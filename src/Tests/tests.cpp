@@ -238,4 +238,54 @@ TEST_CASE( "chip8 interpreter tests", "[chip8]")
             REQUIRE(chip8.V[0xC] == 0x52 / 2);
         }
     }
+    SECTION("SUBN Vx, Vy")
+    {
+        chip8.ram[0x200] = 0x8A;
+        chip8.ram[0x201] = 0xB7;
+
+        chip8.V[0xB] = 0xAA;
+
+        SECTION("underflow")
+        {
+            chip8.V[0xA] = 0xAB;
+
+            chip8.tick();
+
+            REQUIRE(chip8.V[0xA] == 0xFF);
+            REQUIRE(chip8.V[0xF] == 0);
+        }
+        SECTION("no underflow")
+        {
+            chip8.V[0xA] = 0x11;
+
+            chip8.tick();
+
+            REQUIRE(chip8.V[0xA] == (0xAA - 0x11));
+            REQUIRE(chip8.V[0xF] == 1);
+        }
+    }
+    SECTION("SHL Vx")
+    {
+        chip8.ram[0x200] = 0x8C;
+        chip8.ram[0x201] = 0xBE;
+
+        SECTION("bit set")
+        {
+            chip8.V[0xC] = 0x92;
+
+            chip8.tick();
+
+            REQUIRE(chip8.V[0xF] == 1);
+            REQUIRE(chip8.V[0xC] == ((0x92 << 1) & 0xFF));
+        }
+        SECTION("bit unset")
+        {
+            chip8.V[0xC] = 0x72;
+
+            chip8.tick();
+
+            REQUIRE(chip8.V[0xF] == 0);
+            REQUIRE(chip8.V[0xC] == 0x72 << 1);
+        }
+    }
 }
