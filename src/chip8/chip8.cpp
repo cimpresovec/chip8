@@ -38,7 +38,6 @@ void Chip8::tick()
     //Fetch opcode
     unsigned short opcode = ram[PC] << 8 | ram[PC + 1];
 
-
     switch (opcode & 0xF000)
     {
         //3 ops
@@ -65,8 +64,8 @@ void Chip8::tick()
             break;
         //CALL addr
         case 0x2000:
-            SP++;
             stack[SP] = PC;
+            SP++;
             PC = opcode & 0x0FFF;
             break;
         //SE Vx, byte - 3xbb - Skip next instruction if Vx = byte
@@ -101,6 +100,65 @@ void Chip8::tick()
         //ADD Vx, byte - Set Vx = Vx + kk.
         case 0x7000:
             V[(opcode & 0x0F00) >> 8] += opcode & 0x00FF;
+            break;
+        //Multiple op codes
+        case 0x8000:
+            switch (opcode & 0x000F)
+            {
+                //LD Vx Vy, store Vy in Vx
+                case 0x0:
+                    V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x00F0) >> 4];
+                    break;
+                //OR Vx Vy, store in Vx
+                case 0x1:
+                    V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] | V[(opcode & 0x00F0) >> 4];
+                    break;
+                //AND Vx, Vy, store in Vx
+                case 0x2:
+                    V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] & V[(opcode & 0x00F0) >> 4];
+                    break;
+                //XOR Vx, Vy, store in Vx
+                case 0x3:
+                    V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] ^ V[(opcode & 0x00F0) >> 4];
+                    break;
+                //ADD Vx, Vy, store in Vx, set carry in VF
+                case 0x4:
+                    /*
+                    if (V[(opcode & 0x0F00) >> 8] > 0xFF - V[(opcode & 0x00F0) >> 4])
+                    {
+                        V[0xF] = 1;
+                    }
+                    else
+                    {
+                        V[0xF] = 0;
+                    }
+                     */
+                    V[0xF] = V[(opcode & 0x0F00) >> 8] > 0xFF - V[(opcode & 0x00F0) >> 4];
+                    V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] + V[(opcode & 0x00F0) >> 4];
+                    break;
+                //SUB Vx, Vy, store in Vx, set VF to NOT burrow
+                case 0x5:
+                    /*
+                    if (V[(opcode & 0x0F00) >> 8] > V[(opcode & 0x00F0) >> 4])
+                    {
+                        V[0xF] = 1;
+                    }
+                    else
+                    {
+                        V[0xF] = 0;
+                    }
+                     */
+                    V[0xF] = V[(opcode & 0x0F00) >> 8] > V[(opcode & 0x00F0) >> 4];
+                    V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] - V[(opcode & 0x00F0) >> 4];
+                    break;
+                //SHR Vx, VF = Vx & 0x1, Vx = Vx / 2
+                case 0x6:
+                    V[0xF] = V[(opcode & 0x0F00) >> 8] & 0x1;
+                    V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] >> 1;
+                    break;
+                default:
+                    break;
+            }
             break;
         default:
             //TODO ERROR

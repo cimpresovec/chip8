@@ -45,7 +45,7 @@ struct Chip8
     unsigned short ST = 0;
 
     //Stack
-    unsigned char SP = 255;
+    unsigned char SP = 0;
     std::array<unsigned short, 16> stack {};
 
     //Display
