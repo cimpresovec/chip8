@@ -72,25 +72,34 @@ void Chip8::tick()
         case 0x3000:
             if (V[(opcode & 0x0F00) >> 8] == (opcode & 0x00FF))
             {
+                PC += 4;
+            }
+            else
+            {
                 PC += 2;
             }
-            PC += 2;
             break;
         //SNE Vx, byte - 4xbb - Not equal skip
         case 0x4000:
             if (V[(opcode & 0x0F00) >> 8] != (opcode & 0x00FF))
             {
+                PC += 4;
+            }
+            else
+            {
                 PC += 2;
             }
-            PC += 2;
             break;
         //SE Vx, Vy - 5xy0 - Equal skip
         case 0x5000:
             if (V[(opcode & 0x0F00) >> 8] == V[(opcode & 0x00F0) >> 4])
             {
+                PC += 4;
+            }
+            else
+            {
                 PC += 2;
             }
-            PC += 2;
             break;
         //LD Vx, byte - put byte in Vx
         case 0x6000:
@@ -159,6 +168,30 @@ void Chip8::tick()
                 default:
                     break;
             }
+            break;
+        //SNE Vx, Vy - skip if Vx != Vy
+        case 0x9000:
+            if (V[(opcode & 0x0F00) >> 8] != V[(opcode & 0x00F0) >> 4])
+            {
+                PC += 4;
+            }
+            else
+            {
+                PC += 2;
+            }
+            break;
+        //LD I, addr - I = nnn
+        case 0xA000:
+            I = opcode & 0x0FFF;
+            PC += 2;
+            break;
+        //JP V0, addr - jump to loc V0 + nnn
+        case 0xB000:
+            PC = opcode & 0x0FFF + V[0];
+            break;
+        //RND Vx, byte - Vx = RANDOM & kk
+        case 0xC000:
+            V[(opcode & 0x0F00) >> 8] = random_engine() & (opcode & 0x00FF);
             break;
         default:
             //TODO ERROR

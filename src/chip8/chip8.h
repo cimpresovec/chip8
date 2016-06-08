@@ -7,6 +7,7 @@
 
 #include <array>
 #include <string>
+#include <random>
 
 //chip8 box
 struct Chip8
@@ -55,6 +56,9 @@ struct Chip8
     Chip8();
     void tick();
     void loadROM(const std::string file_name);
+
+    //Random engine
+    std::random_device random_engine {};
 };
 
 #endif //CHIP8_CHIP8_H
