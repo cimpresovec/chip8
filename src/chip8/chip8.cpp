@@ -128,32 +128,12 @@ void Chip8::tick()
                     break;
                 //ADD Vx, Vy, store in Vx, set carry in VF
                 case 0x4:
-                    /*
-                    if (V[(opcode & 0x0F00) >> 8] > 0xFF - V[(opcode & 0x00F0) >> 4])
-                    {
-                        V[0xF] = 1;
-                    }
-                    else
-                    {
-                        V[0xF] = 0;
-                    }
-                     */
                     V[0xF] = V[(opcode & 0x0F00) >> 8] > 0xFF - V[(opcode & 0x00F0) >> 4];
                     V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] + V[(opcode & 0x00F0) >> 4];
                     PC += 2;
                     break;
                 //SUB Vx, Vy, store in Vx, set VF to NOT burrow
                 case 0x5:
-                    /*
-                    if (V[(opcode & 0x0F00) >> 8] > V[(opcode & 0x00F0) >> 4])
-                    {
-                        V[0xF] = 1;
-                    }
-                    else
-                    {
-                        V[0xF] = 0;
-                    }
-                     */
                     V[0xF] = V[(opcode & 0x0F00) >> 8] > V[(opcode & 0x00F0) >> 4];
                     V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] - V[(opcode & 0x00F0) >> 4];
                     PC += 2;
