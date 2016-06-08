@@ -304,4 +304,67 @@ TEST_CASE( "chip8 interpreter tests", "[chip8]")
 
         REQUIRE(chip8.PC == 0x202);
     }
+    SECTION("SNE Vx Vy")
+    {
+        chip8.ram[0x200] = 0x90;
+        chip8.ram[0x201] = 0xF0;
+
+        chip8.V[0] = 55;
+
+        SECTION("equal")
+        {
+            chip8.V[15] = 55;
+
+            chip8.tick();
+
+            REQUIRE(chip8.PC == 0x202);
+        }
+        SECTION("not equal")
+        {
+            chip8.V[15] = 56;
+
+            chip8.tick();
+
+            REQUIRE(chip8.PC == 0x204);
+        }
+    }
+    SECTION("LD I, nnn")
+    {
+        chip8.ram[0x200] = 0xAF;
+        chip8.ram[0x201] = 0xBC;
+
+        chip8.tick();
+
+        REQUIRE(chip8.I == 0x0FBC);
+        REQUIRE(chip8.PC == 0x202);
+    }
+    SECTION("JP V0, addr")
+    {
+        chip8.ram[0x200] = 0xB1;
+        chip8.ram[0x201] = 0x11;
+
+        SECTION("V0 == 0")
+        {
+            chip8.tick();
+
+            REQUIRE(chip8.PC == 0x111);
+        }
+        SECTION("V0 != 0")
+        {
+            chip8.V[0] = 0xAF;
+            chip8.tick();
+
+            REQUIRE(chip8.PC == 0x111 + 0xAF);
+        }
+    }
+    SECTION("RND Vx, byte")
+    {
+        //Can't really test random, so set mask to 0x00
+        chip8.ram[0x200] = 0xCA;
+        chip8.ram[0x201] = 0x00;
+
+        chip8.tick();
+
+        REQUIRE(chip8.V[0xA] == 0);
+    };
 }

@@ -187,7 +187,7 @@ void Chip8::tick()
             break;
         //JP V0, addr - jump to loc V0 + nnn
         case 0xB000:
-            PC = opcode & 0x0FFF + V[0];
+            PC = (opcode & 0x0FFF) + V[0];
             break;
         //RND Vx, byte - Vx = RANDOM & kk
         case 0xC000:
