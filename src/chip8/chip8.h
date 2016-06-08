@@ -49,8 +49,8 @@ struct Chip8
     unsigned char SP = 0;
     std::array<unsigned short, 16> stack {};
 
-    //Display
-    std::array<unsigned short, 64*32> display {};
+    //Display - accessed with [y][x]
+    std::array< std::array<unsigned char, 64>, 32> display {};
 
     //Methods
     Chip8();
@@ -59,6 +59,12 @@ struct Chip8
 
     //Random engine
     std::random_device random_engine {};
+
+    //Additional variables for operations
+    unsigned char x_pos = 0;
+    unsigned char y_pos = 0;
+    unsigned char sprite_size = 0;
+    unsigned char sprite_byte = 0;
 };
 
 #endif //CHIP8_CHIP8_H

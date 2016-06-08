@@ -193,6 +193,46 @@ void Chip8::tick()
         case 0xC000:
             V[(opcode & 0x0F00) >> 8] = random_engine() & (opcode & 0x00FF);
             break;
+        //DRW Vx, Vy, nibble - draw n-byte sprite at memory location I on position (Vx, Vy), set VF = collision
+        case 0xD000:
+            //Get parameters
+            x_pos = (opcode & 0x0F00) >> 8;
+            y_pos = (opcode & 0x00F0) >> 4;
+            sprite_size = opcode & 0x000F;
+
+            //Reset VF
+            V[0xF] = 0;
+
+            //Wrap position if required
+            x_pos = x_pos % 64;
+            y_pos = y_pos % 32;
+
+            //Go through sprite rows
+            for (unsigned char y = 0; y < sprite_size; ++y)
+            {
+                //Fetch sprite data
+                sprite_byte = ram[I + y];
+
+                for (unsigned char x = 0; x < 8; ++x)
+                {
+                    //If current sprite bit is set
+                    if ((sprite_byte & (0x80 >> x)) == (0x80 >> x))
+                    {
+                        //If we are going to erase pixel, set VF
+                        if (display[y_pos][x_pos] == 1)
+                        {
+                            V[0xF] = 1;
+                        }
+                        display[y_pos][x_pos] ^= 1;
+
+                        //Move position and wrap
+                        x_pos = (x_pos + 1) % 64;
+                    }
+                }
+                //Move and wrap
+                y_pos = (y_pos + 1) % 32;
+            }
+            break;
         default:
             //TODO ERROR
             break;

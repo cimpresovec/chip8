@@ -367,4 +367,21 @@ TEST_CASE( "chip8 interpreter tests", "[chip8]")
 
         REQUIRE(chip8.V[0xA] == 0);
     };
+    SECTION("DRW Vx, Vy, nibble")
+    {
+        //TODO: Write exhaustive tests for rendering @ different positions, test wrapping etc.
+        chip8.ram[0x200] = 0xD0;
+        chip8.ram[0x201] = 0x01;
+
+        //Put sprite data
+        chip8.I = 0x300;
+        chip8.ram[0x300] = 0xFF;
+
+        chip8.tick();
+
+        for (unsigned char x = 0; x < 8; ++x)
+        {
+            REQUIRE(chip8.display[0][x] == 1);
+        }
+    }
 }
