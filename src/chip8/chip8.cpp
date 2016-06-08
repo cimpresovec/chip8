@@ -225,11 +225,19 @@ void Chip8::tick()
                         }
                         display[y_pos][x_pos] ^= 1;
 
-                        //Move position and wrap
-                        x_pos = (x_pos + 1) % 64;
                     }
+                    //Move position and wrap
+                    x_pos = (x_pos + 1) % 64;
                 }
                 //Move and wrap
+                if (x_pos - 8 < 0)
+                {
+                    x_pos = x_pos - 10 + 64;
+                }
+                else
+                {
+                    x_pos = (x_pos - 8) % 64;
+                }
                 y_pos = (y_pos + 1) % 32;
             }
             break;
