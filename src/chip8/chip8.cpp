@@ -326,13 +326,17 @@ void Chip8::tick()
                     break;
                 //Store binary coded equivalent of value in VX to I, I + 1, I + 2
                 case 0x0033:
-                    //TODO IMPLEMENT
+                {
+                    unsigned char value = V[(opcode & 0x0F00) >> 8];
+                    ram[I] = value / 100;
+                    ram[I + 1] = (value / 10) % 10;
+                    ram[I + 2] = (value % 100) % 10;
                     PC += 2;
                     break;
+                }
                 //Store values of registers V0 - VX inclusive in memory starting at I, move I to the ned
                 case 0x0055:
                 {
-
                     unsigned char count = (opcode & 0x0F00) >> 8;
                     for (unsigned char x = 0; x < count; ++x)
                     {
