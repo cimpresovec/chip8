@@ -67,7 +67,7 @@ void Chip8::tick()
                 //RET - return from subroutine
                 case 0x00EE:
                     SP--;
-                    PC = stack[SP];
+                    PC = stack[SP] + 2;
                     break;
                 //SYS addr - jump to 0nnn
                 default:
@@ -209,13 +209,15 @@ void Chip8::tick()
         //RND Vx, byte - Vx = RANDOM & kk
         case 0xC000:
             V[(opcode & 0x0F00) >> 8] = random_engine() & (opcode & 0x00FF);
+            PC += 2;
             break;
         //DRW Vx, Vy, nibble - draw n-byte sprite at memory location I on position (Vx, Vy), set VF = collision
         case 0xD000:
+        {
             //Get parameters
-            x_pos = (opcode & 0x0F00) >> 8;
-            y_pos = (opcode & 0x00F0) >> 4;
-            sprite_size = opcode & 0x000F;
+            unsigned char x_pos = V[(opcode & 0x0F00) >> 8];
+            unsigned char y_pos = V[(opcode & 0x00F0) >> 4];
+            unsigned char sprite_size = opcode & 0x000F;
 
             //Reset VF
             V[0xF] = 0;
@@ -228,7 +230,7 @@ void Chip8::tick()
             for (unsigned char y = 0; y < sprite_size; ++y)
             {
                 //Fetch sprite data
-                sprite_byte = ram[I + y];
+                unsigned char sprite_byte = ram[I + y];
 
                 for (unsigned char x = 0; x < 8; ++x)
                 {
@@ -249,7 +251,7 @@ void Chip8::tick()
                 //Move and wrap
                 if (x_pos - 8 < 0)
                 {
-                    x_pos = x_pos - 10 + 64;
+                    x_pos = x_pos - 8 + 64;
                 }
                 else
                 {
@@ -259,6 +261,7 @@ void Chip8::tick()
             }
             PC += 2;
             break;
+        }
         case 0xE000:
             switch (opcode & 0x00FF)
             {
@@ -311,7 +314,7 @@ void Chip8::tick()
                 //Set sound timer to VX
                 case 0x0018:
                     ST = V[(opcode & 0x0F00) >> 8];
-                    PC =+ 2;
+                    PC += 2;
                     break;
                 //Set I = I + VX
                 case 0x001E:
@@ -349,8 +352,8 @@ void Chip8::tick()
                 //Fill values of registers V0 - Vx inclusive with memory starting at I, move I to the end
                 case 0x0065:
                 {
-                    unsigned char cunt = (opcode & 0x0F00) >> 8;
-                    for (unsigned char x = 0; x < cunt; ++x)
+                    unsigned char count = (opcode & 0x0F00) >> 8;
+                    for (unsigned char x = 0; x < count; ++x)
                     {
                         V[x] = ram[I];
                         I++;
