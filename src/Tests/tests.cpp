@@ -231,7 +231,7 @@ TEST_CASE( "chip8 interpreter tests", "[chip8]")
 
         SECTION("bit set")
         {
-            chip8.V[0xC] = 0x53;
+            chip8.V[0xB] = 0x53;
 
             chip8.tick();
 
@@ -240,7 +240,7 @@ TEST_CASE( "chip8 interpreter tests", "[chip8]")
         }
         SECTION("bit unset")
         {
-            chip8.V[0xC] = 0x52;
+            chip8.V[0xB] = 0x52;
 
             chip8.tick();
 
@@ -285,7 +285,7 @@ TEST_CASE( "chip8 interpreter tests", "[chip8]")
 
         SECTION("bit set")
         {
-            chip8.V[0xC] = 0x92;
+            chip8.V[0xB] = 0x92;
 
             chip8.tick();
 
@@ -294,7 +294,7 @@ TEST_CASE( "chip8 interpreter tests", "[chip8]")
         }
         SECTION("bit unset")
         {
-            chip8.V[0xC] = 0x72;
+            chip8.V[0xB] = 0x72;
 
             chip8.tick();
 
