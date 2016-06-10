@@ -46,11 +46,19 @@ void Chip8::tick()
             {
                 //CLS - clear screen
                 case 0x00E0:
-                    //TODO
+                    for (unsigned char y = 0; y < 32; ++y)
+                    {
+                        for (unsigned char x = 0; x < 64; ++x)
+                        {
+                            display[y][x] = 0;
+                        }
+                    }
+                    PC += 2;
                     break;
                 //RET - return from subroutine
                 case 0x00EE:
-                    //TODO
+                    SP--;
+                    PC = stack[SP];
                     break;
                 //SYS addr - jump to 0nnn
                 default:
@@ -159,10 +167,10 @@ void Chip8::tick()
                     V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x00F0) >> 4] - V[(opcode & 0x0F00) >> 8];
                     PC += 2;
                     break;
-                //SHL Vx, VF = Vx & 0x1, Vx = Vx << 1
+                //SHL Vx, VF = Vy & 0x1, Vx = Vy << 1
                 case 0xE:
-                    V[0xF] = (V[(opcode & 0x0F00) >> 8] & 0x80) >> 7;
-                    V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] << 1;
+                    V[0xF] = (V[(opcode & 0x00F0) >> 4] & 0x80) >> 7;
+                    V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x00F0) >> 4] << 1;
                     PC += 2;
                     break;
                 default:
