@@ -248,6 +248,108 @@ void Chip8::tick()
                 }
                 y_pos = (y_pos + 1) % 32;
             }
+            PC += 2;
+            break;
+        case 0xE000:
+            switch (opcode & 0x00FF)
+            {
+                //Skip next if key with hex VX is pressed
+                case 0x009E:
+                    if (input[V[(opcode & 0x0F00) >> 8]] == 0x1)
+                    {
+                        PC += 4;
+                    }
+                    else
+                    {
+                        PC += 2;
+                    }
+                    break;
+                //Skip next if key with hex Vx is not pressed
+                case 0x00A1:
+                    if (input[V[(opcode & 0x0F00) >> 8]] == 0x0)
+                    {
+                        PC += 4;
+                    }
+                    else
+                    {
+                        PC += 2;
+                    }
+                    break;
+                default:
+                    //TODO ERROR
+                    break;
+            }
+            break;
+        case 0xF000:
+            switch (opcode & 0x00FF)
+            {
+                //Store value of delay timer in VX
+                case 0x0007:
+                    V[(opcode & 0x0F00) >> 8] = DT;
+                    PC += 2;
+                    break;
+                //Wait for keypress and store result in VX
+                case 0x000A:
+                    //TODO IMPLEMENT, TEMP
+                    V[(opcode & 0x0F00) >> 8] = 0x0;
+                    PC += 2;
+                    break;
+                //Set delay timer to VX
+                case 0x0015:
+                    DT = V[(opcode & 0x0F00) >> 8];
+                    PC += 2;
+                    break;
+                //Set sound timer to VX
+                case 0x0018:
+                    ST = V[(opcode & 0x0F00) >> 8];
+                    PC =+ 2;
+                    break;
+                //Set I = I + VX
+                case 0x001E:
+                    I += V[(opcode & 0x0F00) >> 8];
+                    PC += 2;
+                    break;
+                //Set I to mem address of sprite of char stored in VX
+                case 0x0029:
+                    //Each char is 5 bytes of data, starting at 0x00 in RAM
+                    I = V[(opcode & 0x0F00) >> 8] * 5;
+                    PC += 2;
+                    break;
+                //Store binary coded equivalent of value in VX to I, I + 1, I + 2
+                case 0x0033:
+                    //TODO IMPLEMENT
+                    PC += 2;
+                    break;
+                //Store values of registers V0 - VX inclusive in memory starting at I, move I to the ned
+                case 0x0055:
+                {
+
+                    unsigned char count = (opcode & 0x0F00) >> 8;
+                    for (unsigned char x = 0; x < count; ++x)
+                    {
+                        ram[I] = V[x];
+                        I++;
+                    }
+                    PC += 2;
+                    break;
+                }
+                //Fill values of registers V0 - Vx inclusive with memory starting at I, move I to the end
+                case 0x0065:
+                {
+                    unsigned char cunt = (opcode & 0x0F00) >> 8;
+                    for (unsigned char x = 0; x < cunt; ++x)
+                    {
+                        V[x] = ram[I];
+                        I++;
+                    }
+                    PC += 2;
+                    break;
+
+                }
+                default:
+                    //TODO ERROR
+                    break;
+            }
             break;
         default:
             //TODO ERROR

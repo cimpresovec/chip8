@@ -42,8 +42,8 @@ struct Chip8
     unsigned short PC = 0x200;
 
     //Timer registers
-    unsigned short DT = 0;
-    unsigned short ST = 0;
+    unsigned char DT = 0;
+    unsigned char ST = 0;
 
     //Stack
     unsigned char SP = 0;
@@ -51,6 +51,9 @@ struct Chip8
 
     //Display - accessed with [y][x]
     std::array< std::array<unsigned char, 64>, 32> display {};
+
+    //Input
+    std::array<unsigned char, 16> input {};
 
     //Methods
     Chip8();
