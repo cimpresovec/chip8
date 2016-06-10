@@ -3,6 +3,7 @@
 //
 
 #include <fstream>
+#include <iostream>
 #include "chip8.h"
 
 Chip8::Chip8()
@@ -33,10 +34,18 @@ void Chip8::loadROM(const std::string file_name)
     file.close();
 }
 
+void Chip8::tickTimers()
+{
+    if (DT > 0) DT--;
+    if (ST > 0) ST--;
+}
+
 void Chip8::tick()
 {
     //Fetch opcode
     unsigned short opcode = ram[PC] << 8 | ram[PC + 1];
+
+    //std::cout << std::hex << opcode << '\n';
 
     switch (opcode & 0xF000)
     {

@@ -58,16 +58,11 @@ struct Chip8
     //Methods
     Chip8();
     void tick();
+    void tickTimers();
     void loadROM(const std::string file_name);
 
     //Random engine
     std::random_device random_engine {};
-
-    //Additional variables for operations
-    unsigned char x_pos = 0;
-    unsigned char y_pos = 0;
-    unsigned char sprite_size = 0;
-    unsigned char sprite_byte = 0;
 };
 
 #endif //CHIP8_CHIP8_H
