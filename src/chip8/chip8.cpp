@@ -72,6 +72,7 @@ void Chip8::tick()
                 //SYS addr - jump to 0nnn
                 default:
                     PC = opcode & 0x0FFF;
+                    std::cout << "Error\n";
                     break;
             }
             break;
@@ -120,12 +121,12 @@ void Chip8::tick()
             break;
         //LD Vx, byte - put byte in Vx
         case 0x6000:
-            V[(opcode & 0x0F00) >> 8] = opcode & 0x00FF;
+            V[(opcode & 0x0F00) >> 8] = (opcode & 0x00FF);
             PC += 2;
             break;
         //ADD Vx, byte - Set Vx = Vx + kk.
         case 0x7000:
-            V[(opcode & 0x0F00) >> 8] += opcode & 0x00FF;
+            V[(opcode & 0x0F00) >> 8] += (opcode & 0x00FF);
             PC += 2;
             break;
         //Multiple op codes
@@ -183,6 +184,7 @@ void Chip8::tick()
                     PC += 2;
                     break;
                 default:
+                    std::cout << "Error\n";
                     break;
             }
             break;
@@ -288,7 +290,7 @@ void Chip8::tick()
                     }
                     break;
                 default:
-                    //TODO ERROR
+                    std::cout << "Error\n";
                     break;
             }
             break;
@@ -369,12 +371,12 @@ void Chip8::tick()
 
                 }
                 default:
-                    //TODO ERROR
+                    std::cout << "Error\n";
                     break;
             }
             break;
         default:
-            //TODO ERROR
+            std::cout << "Error\n";
             break;
     }
 }
