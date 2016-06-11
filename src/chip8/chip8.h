@@ -54,6 +54,9 @@ struct Chip8
 
     //Input
     std::array<unsigned char, 16> input {};
+    unsigned char last_pressed = 0;
+    bool new_press = false;
+    bool need_new = false;
 
     //Methods
     Chip8();

@@ -302,9 +302,15 @@ void Chip8::tick()
                     break;
                 //Wait for keypress and store result in VX
                 case 0x000A:
-                    //TODO IMPLEMENT, TEMP
-                    V[(opcode & 0x0F00) >> 8] = 0x0;
-                    PC += 2;
+                    //new_press wil be set from outside, then the instruction will complete
+                    need_new = true;
+                    if (new_press)
+                    {
+                        need_new = false;
+                        new_press = false;
+                        V[(opcode & 0x0F00) >> 8] = last_pressed;
+                        PC += 2;
+                    }
                     break;
                 //Set delay timer to VX
                 case 0x0015:
