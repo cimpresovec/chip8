@@ -341,7 +341,7 @@ void Chip8::tick()
                 case 0x0055:
                 {
                     unsigned char count = (opcode & 0x0F00) >> 8;
-                    for (unsigned char x = 0; x < count; ++x)
+                    for (unsigned char x = 0; x <= count; ++x)
                     {
                         ram[I] = V[x];
                         I++;
@@ -353,7 +353,7 @@ void Chip8::tick()
                 case 0x0065:
                 {
                     unsigned char count = (opcode & 0x0F00) >> 8;
-                    for (unsigned char x = 0; x < count; ++x)
+                    for (unsigned char x = 0; x <= count; ++x)
                     {
                         V[x] = ram[I];
                         I++;
